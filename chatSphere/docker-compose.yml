@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  signaling-server:
+    image: node:18
+    container_name: chatsphere-signaling-server
+    working_dir: /app
+    volumes:
+      - ./signaling-server:/app
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install && node server.js"
+    networks:
+      - chatsphere-network
+
+  web-client:
+    image: nginx:alpine
+    container_name: chatsphere-web-client
+    volumes:
+      - ./web-client:/usr/share/nginx/html:ro
+    ports:
+      - "8080:80"
+    networks:
+      - chatsphere-network
+
+networks:
+  chatsphere-network:
+    driver: bridge
